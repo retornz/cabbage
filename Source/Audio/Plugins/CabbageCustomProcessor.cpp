@@ -17,61 +17,15 @@
   02111-1307 USA
 */
 
-#include "CabbagePluginProcessor.h"
-#include "./CustomProcessor/CabbageCustomProcessor.h"
-#include "CabbagePluginEditor.h"
+#include "CabbageCustomProcessor.h"
+#include "CabbageCustomEditor.h"
 
 char tmp_string[4096] = { 0 };
 char channelMessage[4096] = { 0 };
 
-AudioProcessor* JUCE_CALLTYPE
-
-createPluginFilter() {
-//	CabbageUtilities::debug("==========================================");
-//	File csdFile;
-//#ifdef JUCE_WINDOWS
-//	CabbageUtilities::debug(CharPointer_UTF8(JucePlugin_Manufacturer));
-//	csdFile = File::getSpecialLocation(File::currentExecutableFile).withFileExtension(String(".csd")).getFullPathName();
-//	const String homeDrive = File::getSpecialLocation(File::windowsSystemDirectory).getParentDirectory().getParentDirectory().getFullPathName();
-//	
-//	if (csdFile.existsAsFile() == false)
-//	{		
-//		String filename = homeDrive+"/ProgramData/" + String(JucePlugin_Manufacturer) + "/" + File::getSpecialLocation(File::currentExecutableFile).getFileNameWithoutExtension() + "/" + File::getSpecialLocation(File::currentExecutableFile).withFileExtension(String(".csd")).getFileName();
-//		csdFile = File(filename);
-//	}
-//#elif JUCE_MAC
-//	//read .csd file from the correct location within the .vst bundle.
-//	const String dir = File::getSpecialLocation(File::currentExecutableFile).getParentDirectory().getParentDirectory().getFullPathName();
-//	const String filename(File::getSpecialLocation(File::currentExecutableFile).withFileExtension(String(".csd")).getFileName());
-//	csdFile = File(dir + "/" + filename);
-//#else
-//	CabbageUtilities::debug(JucePlugin_Manufacturer);
-//	csdFile = File::getSpecialLocation(File::currentExecutableFile).withFileExtension(String(".csd")).getFullPathName();
-//	if (csdFile.existsAsFile() == false)
-//	{
-//        //In Linux, plugin application directory will reside in ~/Manufacturer/PluginName
-//		String filename = "~/" + String(JucePlugin_Manufacturer) + "/" + File::getSpecialLocation(File::currentExecutableFile).getFileNameWithoutExtension() + "/" + File::getSpecialLocation(File::currentExecutableFile).withFileExtension(String(".csd")).getFileName();
-//
-//		csdFile = File(filename);
-//	}
-//#endif
-//
-//
-//	if (csdFile.existsAsFile() == false)
-//		Logger::writeToLog("Could not find .csd file " + csdFile.getFullPathName() + ", please make sure it's in the correct folder");
-//
-//	String csdString = csdFile.loadFileAsString();
-//
-//    return new CabbagePluginProcessor(csdFile, CabbagePluginProcessor::readBusesPropertiesFromXml(csdFile));
-//
-//
-	return new CabbageCustomProcessor();
-};
-
 //============================================================================
-CabbagePluginProcessor::CabbagePluginProcessor(File inputFile, BusesProperties ioBuses)
-	: CsoundPluginProcessor(inputFile, ioBuses),
-	cabbageWidgets("CabbageWidgetData"),
+CabbageCustomProcessor::CabbageCustomProcessor(File inputFile, BusesProperties ioBuses)
+	:	cabbageWidgets("CabbageWidgetData"),
 	csdFile(inputFile)
 {
 	CabbageUtilities::debug("Cabbage Processor Constructor - Requested input channels:", getTotalNumInputChannels());
@@ -82,7 +36,7 @@ CabbagePluginProcessor::CabbagePluginProcessor(File inputFile, BusesProperties i
     startTimer(20);
 }
 
-void CabbagePluginProcessor::createCsound(File inputFile, bool shouldCreateParameters)
+void CabbageCustomProcessor::createCsound(File inputFile, bool shouldCreateParameters)
 {
 	if (inputFile.existsAsFile()) {
 		setWidthHeight();
@@ -133,7 +87,7 @@ void CabbagePluginProcessor::createCsound(File inputFile, bool shouldCreateParam
 	}
 }
 
-CabbagePluginProcessor::~CabbagePluginProcessor()
+CabbageCustomProcessor::~CabbageCustomProcessor()
 {
 	for (auto xyAuto : xyAutomators)
 		xyAuto->removeAllChangeListeners();
@@ -147,7 +101,7 @@ void test()
     
 }
 
-void CabbagePluginProcessor::timerCallback()
+void CabbageCustomProcessor::timerCallback()
 {
     if(autoUpdateCount == 0 && autoUpdateIsOn)
     {
@@ -175,7 +129,7 @@ void CabbagePluginProcessor::timerCallback()
 }
 
 //==============================================================================
-void CabbagePluginProcessor::setWidthHeight() {
+void CabbageCustomProcessor::setWidthHeight() {
 	StringArray csdLines;
 	csdLines.addLines(csdFile.loadFileAsString());
 
@@ -193,7 +147,7 @@ void CabbagePluginProcessor::setWidthHeight() {
 	}
 }
 
-void CabbagePluginProcessor::parseCsdFile(StringArray& linesFromCsd)
+void CabbageCustomProcessor::parseCsdFile(StringArray& linesFromCsd)
 {
 	for (auto line : linesFromCsd)
 	{
@@ -375,7 +329,7 @@ void CabbagePluginProcessor::parseCsdFile(StringArray& linesFromCsd)
 	}
 }
 
-bool CabbagePluginProcessor::isWidgetPlantParent(StringArray& linesFromCsd, int lineNumber) {
+bool CabbageCustomProcessor::isWidgetPlantParent(StringArray& linesFromCsd, int lineNumber) {
 	if (linesFromCsd[lineNumber].contains("{"))
 		return true;
 
@@ -385,14 +339,14 @@ bool CabbagePluginProcessor::isWidgetPlantParent(StringArray& linesFromCsd, int 
 	return false;
 }
 
-bool CabbagePluginProcessor::shouldClosePlant(StringArray& linesFromCsd, int lineNumber) {
+bool CabbageCustomProcessor::shouldClosePlant(StringArray& linesFromCsd, int lineNumber) {
 	if (linesFromCsd[lineNumber].contains("}"))
 		return true;
 
 	return false;
 }
 
-bool CabbagePluginProcessor::addImportFiles(StringArray& linesFromCsd) {
+bool CabbageCustomProcessor::addImportFiles(StringArray& linesFromCsd) {
 
 	getMacros(linesFromCsd);
 	bool hasImportFiles = false;
@@ -442,7 +396,7 @@ bool CabbagePluginProcessor::addImportFiles(StringArray& linesFromCsd) {
 	return hasImportFiles;
 }
 
-void CabbagePluginProcessor::handleXmlImport(XmlElement* xml, StringArray& linesFromCsd) {
+void CabbageCustomProcessor::handleXmlImport(XmlElement* xml, StringArray& linesFromCsd) {
 	PlantImportStruct importData;
 
 	if (xml->hasTagName("plant")) {
@@ -471,7 +425,7 @@ void CabbagePluginProcessor::handleXmlImport(XmlElement* xml, StringArray& lines
 	}
 }
 
-void CabbagePluginProcessor::insertPlantCode(StringArray& linesFromCsd) {
+void CabbageCustomProcessor::insertPlantCode(StringArray& linesFromCsd) {
 	getMacros(linesFromCsd);
 
 	const StringArray copy = linesFromCsd;
@@ -604,7 +558,7 @@ void CabbagePluginProcessor::insertPlantCode(StringArray& linesFromCsd) {
 }
 
 
-void CabbagePluginProcessor::insertUDOCode(PlantImportStruct importData, StringArray& linesFromCsd) {
+void CabbageCustomProcessor::insertUDOCode(PlantImportStruct importData, StringArray& linesFromCsd) {
 	//todo don't check blocks of commented code
 	for (auto str : linesFromCsd) {
 		//str = str.replaceCharacters("\t", " ").trim();
@@ -624,7 +578,7 @@ void CabbagePluginProcessor::insertUDOCode(PlantImportStruct importData, StringA
 	}
 }
 
-void CabbagePluginProcessor::generateCabbageCodeFromJS(PlantImportStruct& importData, String text) {
+void CabbageCustomProcessor::generateCabbageCodeFromJS(PlantImportStruct& importData, String text) {
 	JavascriptEngine engine;
 	engine.maximumExecutionTime = RelativeTime::seconds(5);
 	engine.registerNativeObject("Cabbage", new CabbageJavaClass(this));
@@ -645,7 +599,7 @@ void CabbagePluginProcessor::generateCabbageCodeFromJS(PlantImportStruct& import
 }
 
 
-void CabbagePluginProcessor::getMacros(const StringArray& linesFromCsd) {
+void CabbageCustomProcessor::getMacros(const StringArray& linesFromCsd) {
 	var tempMacroNames, tempMacroStrings;
 
 	for (String csdLine : linesFromCsd) //deal with Cabbage macros
@@ -685,7 +639,7 @@ void CabbagePluginProcessor::getMacros(const StringArray& linesFromCsd) {
 
 }
 
-void CabbagePluginProcessor::expandMacroText(String& line, ValueTree wData) {
+void CabbageCustomProcessor::expandMacroText(String& line, ValueTree wData) {
 	String csdLine;
 
 	String defineText;
@@ -718,7 +672,7 @@ void CabbagePluginProcessor::expandMacroText(String& line, ValueTree wData) {
 }
 
 //rebuild the entire GUi each time something changes.
-void CabbagePluginProcessor::updateWidgets(String csdText) {
+void CabbageCustomProcessor::updateWidgets(String csdText) {
 	CabbagePluginEditor* editor = static_cast<CabbagePluginEditor*> (this->getActiveEditor());
 	StringArray strings;
 	strings.addLines(csdText);
@@ -727,7 +681,7 @@ void CabbagePluginProcessor::updateWidgets(String csdText) {
 	editor->updateLayoutEditorFrames();
 }
 
-void CabbagePluginProcessor::addCabbageParameter(std::unique_ptr<CabbagePluginParameter> parameter)
+void CabbageCustomProcessor::addCabbageParameter(std::unique_ptr<CabbagePluginParameter> parameter)
 {
 	if (parameter->getIsAutomatable()) {
 		addParameter(parameter->releaseHostParameter());
@@ -737,7 +691,7 @@ void CabbagePluginProcessor::addCabbageParameter(std::unique_ptr<CabbagePluginPa
 }
 
 
-void CabbagePluginProcessor::releaseResources()
+void CabbageCustomProcessor::releaseResources()
 {
 	// When playback stops, you can use this as an opportunity to free up any
 	// spare memory, etc.
@@ -746,7 +700,7 @@ void CabbagePluginProcessor::releaseResources()
 //==============================================================================
 // create parameters for sliders, buttons, comboboxes, checkboxes, encoders and xypads.
 // Other widgets can communicate with Csound, but they cannot be automated
-void CabbagePluginProcessor::createCabbageParameters()
+void CabbageCustomProcessor::createCabbageParameters()
 {
 	CabbageControlWidgetStrings controlWidgetTypes;
 
@@ -924,28 +878,28 @@ void CabbagePluginProcessor::createCabbageParameters()
 }
 
 //==============================================================================
-bool CabbagePluginProcessor::hasEditor() const {
+bool CabbageCustomProcessor::hasEditor() const {
 	return true;
 }
 
-AudioProcessorEditor* CabbagePluginProcessor::createEditor() {
+AudioProcessorEditor* CabbageCustomProcessor::createEditor() {
 	return new CabbagePluginEditor(*this);
 }
 
 //==============================================================================
-void CabbagePluginProcessor::getStateInformation(MemoryBlock& destData) {
+void CabbageCustomProcessor::getStateInformation(MemoryBlock& destData) {
 	copyXmlToBinary(savePluginState("CABBAGE_PRESETS"), destData);
     //File file(csdFile.getParentDirectory().getFullPathName()+"/testSessionData.txt");
     //savePluginState("CABBAGE_PRESETS").writeTo(file);
 }
 
-void CabbagePluginProcessor::setStateInformation(const void* data, int sizeInBytes) {
+void CabbageCustomProcessor::setStateInformation(const void* data, int sizeInBytes) {
 	std::unique_ptr <XmlElement> xmlElement(getXmlFromBinary(data, sizeInBytes));
 	restorePluginState(xmlElement.get());
 }
 
 //==============================================================================
-void CabbagePluginProcessor::addPluginPreset(String presetName,  String fileName, bool remove)
+void CabbageCustomProcessor::addPluginPreset(String presetName,  String fileName, bool remove)
 {
     
     nlohmann::ordered_json j;
@@ -1083,7 +1037,7 @@ void CabbagePluginProcessor::addPluginPreset(String presetName,  String fileName
 
 }
 
-void CabbagePluginProcessor::restorePluginPreset(String presetName, String fileName)
+void CabbageCustomProcessor::restorePluginPreset(String presetName, String fileName)
 {
 
     currentPresetName = presetName;
@@ -1231,7 +1185,7 @@ void CabbagePluginProcessor::restorePluginPreset(String presetName, String fileN
 }
 //===============================================================================================
 
-XmlElement CabbagePluginProcessor::savePluginState(String xmlTag)
+XmlElement CabbageCustomProcessor::savePluginState(String xmlTag)
 {
     std::unique_ptr<XmlElement> xml;
     xml = std::unique_ptr<XmlElement>(new XmlElement("CABBAGE_PRESETS"));
@@ -1346,7 +1300,7 @@ XmlElement CabbagePluginProcessor::savePluginState(String xmlTag)
 	return *xml;
 }
 
-void CabbagePluginProcessor::restorePluginState(XmlElement* xmlState) {
+void CabbageCustomProcessor::restorePluginState(XmlElement* xmlState) {
 	if (xmlState != nullptr) {
 		//if dealing with session saved by host
         setParametersFromXml(xmlState);
@@ -1355,7 +1309,7 @@ void CabbagePluginProcessor::restorePluginState(XmlElement* xmlState) {
 	}
 }
 
-void CabbagePluginProcessor::setParametersFromXml(XmlElement* e)
+void CabbageCustomProcessor::setParametersFromXml(XmlElement* e)
 {
 	if (e)
 	{
@@ -1465,7 +1419,7 @@ void CabbagePluginProcessor::setParametersFromXml(XmlElement* e)
 	}
 }
 
-void CabbagePluginProcessor::getIdentifierDataFromCsound()
+void CabbageCustomProcessor::getIdentifierDataFromCsound()
 {
     
     if(!getEngine())
@@ -1560,7 +1514,7 @@ void CabbagePluginProcessor::getIdentifierDataFromCsound()
 // This method is responsible for updating widget valuetrees based on the current
 // data stored in each widget's software channel bus. 
 //==============================================================================
-void CabbagePluginProcessor::getChannelDataFromCsound()
+void CabbageCustomProcessor::getChannelDataFromCsound()
 {
 	if (!getEngine())
 		return;
@@ -1698,7 +1652,7 @@ void CabbagePluginProcessor::getChannelDataFromCsound()
 	}
 }
 
-void CabbagePluginProcessor::triggerCsoundEvents() {
+void CabbageCustomProcessor::triggerCsoundEvents() {
 	if (!getEngine())
 		return;
 
@@ -1735,7 +1689,7 @@ void CabbagePluginProcessor::triggerCsoundEvents() {
 }
 
 //================================================================================
-void CabbagePluginProcessor::addXYAutomator(CabbageXYPad* xyPad, ValueTree wData) {
+void CabbageCustomProcessor::addXYAutomator(CabbageXYPad* xyPad, ValueTree wData) {
 	int indexOfAutomator = -1;
 
 	for (int i = 0; i < xyAutomators.size(); i++) {
@@ -1765,7 +1719,7 @@ void CabbagePluginProcessor::addXYAutomator(CabbageXYPad* xyPad, ValueTree wData
 }
 
 
-void CabbagePluginProcessor::enableXYAutomator(String name, bool enable, Line<float> dragLine) {
+void CabbageCustomProcessor::enableXYAutomator(String name, bool enable, Line<float> dragLine) {
 
 	for (XYPadAutomator* xyAuto : xyAutomators) {
 		if (name == xyAuto->getName()) {
@@ -1786,7 +1740,7 @@ void CabbagePluginProcessor::enableXYAutomator(String name, bool enable, Line<fl
 	}
 }
 
-void CabbagePluginProcessor::disableXYAutomators() 
+void CabbageCustomProcessor::disableXYAutomators() 
 {
 	for (XYPadAutomator* xyAuto : xyAutomators) 
 	{
@@ -1795,7 +1749,7 @@ void CabbagePluginProcessor::disableXYAutomators()
 }
 
 //======================================================================================================
-CabbagePluginParameter* CabbagePluginProcessor::getParameterForXYPad(StringRef name) {
+CabbagePluginParameter* CabbageCustomProcessor::getParameterForXYPad(StringRef name) {
 	for (auto param : getCabbageParameters()) {
 		if (CabbagePluginParameter * cabbageParam = dynamic_cast<CabbagePluginParameter*> (param)) {
 			if (name == cabbageParam->getWidgetName())
@@ -1807,7 +1761,7 @@ CabbagePluginParameter* CabbagePluginProcessor::getParameterForXYPad(StringRef n
 }
 
 //==============================================================================
-void CabbagePluginProcessor::setCabbageParameter(String& channel, float value, ValueTree& wData)
+void CabbageCustomProcessor::setCabbageParameter(String& channel, float value, ValueTree& wData)
 {
     if(pollingChannels() == 0){
         MessageManager::callAsync ([this, wData, channel, value](){
@@ -1842,7 +1796,7 @@ void CabbagePluginProcessor::setCabbageParameter(String& channel, float value, V
     
 }
 
-void CabbagePluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
+void CabbageCustomProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 	bool csoundRecompiled = false;
 	samplesInBlock = samplesPerBlock;

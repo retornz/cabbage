@@ -15,7 +15,7 @@ if(NOT DEFINED CMAKE_BUILD_TYPE)
 endif()
 
 if(NOT DEFINED BUILD_VERSION)
-	set(BUILD_VERSION 2.8.36)
+	set(BUILD_VERSION 2.8.37)
 endif()
 
 project(${PROJECT_NAME} VERSION ${BUILD_VERSION})
@@ -128,6 +128,10 @@ Source/Audio/Plugins/CabbagePluginEditor.cpp
 Source/Audio/Plugins/CabbagePluginEditor.h
 Source/Audio/Plugins/CabbagePluginProcessor.cpp
 Source/Audio/Plugins/CabbagePluginProcessor.h
+Source/Audio/Plugins/CustomProcessor/CabbageCustomEditor.cpp
+Source/Audio/Plugins/CustomProcessor/CabbageCustomEditor.h
+Source/Audio/Plugins/CustomProcessor/CabbageCustomProcessor.cpp
+Source/Audio/Plugins/CustomProcessor/CabbageCustomProcessor.h
 Source/Audio/Plugins/CsoundPluginEditor.cpp
 Source/Audio/Plugins/CsoundPluginEditor.h
 Source/Audio/Plugins/CsoundPluginProcessor.cpp
