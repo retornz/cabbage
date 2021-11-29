@@ -19,7 +19,7 @@ CabbageListBox::CabbageListBox(ValueTree wData, CabbagePluginEditor* _owner):
     CabbageWidgetBase(_owner)
 {
     addAndMakeVisible(listBox);
-    listBox.setRowHeight (20);
+    listBox.setRowHeight (16);
     listBox.setModel (this);
     getProperties().set("isPresetCombo", false);
     highlightColour = CabbageWidgetData::getStringProp (widgetData, CabbageIdentifierIds::highlightcolour);
@@ -371,7 +371,7 @@ void CabbageListBox::paintListBoxItem (int rowNumber, Graphics& g,
         g.fillAll (Colour::fromString(highlightColour));
     else
         g.fillAll(Colour::fromString(colour));
-
+	g.setFont(Font(11.0f));
     g.setColour(Colour::fromString(fontColour));
     g.drawFittedText(stringItems[rowNumber], Rectangle<int> (width, height), justify, 0);
 }
