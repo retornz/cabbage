@@ -58,7 +58,7 @@ public:
 		l->setColour(TextEditor::outlineColourId, slider.findColour(Slider::textBoxOutlineColourId));
 		l->setColour(TextEditor::highlightColourId, slider.findColour(Slider::textBoxHighlightColourId));
 		if(fontSize!=-1)
-			l->setFont(Font(fontSize));
+			l->setFont(Font(fontSize,Font::bold));
 
 		return l;
 	}
