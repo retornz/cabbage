@@ -1337,10 +1337,12 @@ Font CabbageLookAndFeel2::getLabelFont(Label& label)
 
 void CabbageLookAndFeel2::positionComboBoxText (ComboBox& box, Label& label)
 {
-    label.setBounds (1, 2,
+    //label.setBounds (1, 2,
+    //                 box.getWidth() + 3 - box.getHeight(),
+    //                 box.getHeight() - 4);
+    label.setBounds (1, 4,
                      box.getWidth() + 3 - box.getHeight(),
-                     box.getHeight() - 4);
-    
+                     box.getHeight() - 7);
     label.setFont (getComboBoxFont (box));
 }
 
