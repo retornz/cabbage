@@ -90,7 +90,7 @@ void CabbageKeyboardDisplay::updateColours(ValueTree& wData)
 	setColour(MidiKeyboardComponent::upDownButtonBackgroundColourId, Colour::fromString(CabbageWidgetData::getStringProp(wData, CabbageIdentifierIds::arrowbackgroundcolour)));
 	setColour(MidiKeyboardComponent::keySeparatorLineColourId, Colour::fromString(CabbageWidgetData::getStringProp(wData, CabbageIdentifierIds::keyseparatorcolour)));
 	setColour(MidiKeyboardComponent::mouseOverKeyOverlayColourId, Colour::fromString(CabbageWidgetData::getStringProp(wData, CabbageIdentifierIds::mouseoverkeycolour)));
-	setColour(MidiKeyboardComponent::keyDownOverlayColourId, Colour::fromString(CabbageWidgetData::getStringProp(wData, CabbageIdentifierIds::keydowncolour)));
+	setColour(MidiKeyboardComponent::keyDownOverlayColourId, juce::Colours::lightblue);
 }
 
 static const uint8 whiteNotes[] = { 0, 2, 4, 5, 7, 9, 11 };
