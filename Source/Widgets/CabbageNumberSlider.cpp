@@ -135,9 +135,9 @@ void CabbageNumberSlider::valueTreePropertyChanged (ValueTree& valueTree, const 
         handleCommonUpdates (this, valueTree, false, prop);      //handle common updates such as bounds, alpha, rotation, visible, etc
         align = CabbageWidgetData::getStringProp (valueTree, CabbageIdentifierIds::align);
         label.setText (getText(), dontSendNotification);
-        const int fontSize = (CabbageWidgetData::getNumProp(widgetData, CabbageIdentifierIds::fontsize) == -1 ? CabbageWidgetData::getNumProp(widgetData, CabbageIdentifierIds::height) - 10 :
-                              CabbageWidgetData::getNumProp(widgetData, CabbageIdentifierIds::fontsize));
-        sliderLookAndFeel.setFontSize(fontSize);
+        //const int fontSize = (CabbageWidgetData::getNumProp(widgetData, CabbageIdentifierIds::fontsize) == -1 ? CabbageWidgetData::getNumProp(widgetData, CabbageIdentifierIds::height) - 10 :
+        //                     CabbageWidgetData::getNumProp(widgetData, CabbageIdentifierIds::fontsize));
+        //sliderLookAndFeel.setFontSize(fontSize);
         slider.sendLookAndFeelChange();
         resized();
     }

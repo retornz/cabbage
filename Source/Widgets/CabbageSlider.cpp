@@ -191,6 +191,7 @@ CabbageSlider::CabbageSlider(ValueTree wData, CabbagePluginEditor* _owner)
         slider.setLookAndFeel(&flatLookAndFeel);
         textLabel.setLookAndFeel(&flatLookAndFeel);
     }
+	textLabel.setLookAndFeel(&flatLookAndFeel);
     slider.setTextValueSuffix(postfix);
     
     
@@ -406,20 +407,19 @@ void CabbageSlider::resized()
 
             if (shouldShowTextBox == 1)
             {
-                textLabel.setBounds(0, 0, getWidth(), getHeight() * .2f);
+				textLabel.setBounds (0, 0, getWidth(), 20);
                 if (isFilmStripSlider)
                     filmStripBounds.setBounds(getWidth() * .2f, getHeight() * .2f, getWidth() * .6f, getHeight() * .6f);
 
-                getSlider().setBounds(0, getHeight() * .2f, getWidth(), getHeight() - getHeight() * .2f);
+				getSlider().setBounds (0, 20, getWidth(), getHeight() - 20);
             }
             else
             {
-                textLabel.setBounds(0, getHeight() - getHeight() * .2f, getWidth(), getHeight() * .2f);
+				textLabel.setBounds (0, getHeight() - 20, getWidth(), 20);
                 if (isFilmStripSlider)
                     filmStripBounds.setBounds(getWidth() * .09f, 0, getWidth() - getWidth() * .175f, getHeight() - getHeight() * .175f);
-                //getSlider().setBounds(-getWidth() * .1f, -getHeight()*.1f, getWidth() + getWidth() * .2f, getHeight()+ getHeight() * .1f);
 
-                getSlider().setBounds(0, 0, getWidth(), getHeight() - getHeight() * .15f);
+				getSlider().setBounds(0, 0, getWidth(), getHeight() - 15);
             }
         }
         else

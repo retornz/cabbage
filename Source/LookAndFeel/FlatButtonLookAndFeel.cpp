@@ -560,11 +560,9 @@ Font FlatButtonLookAndFeel::getComboBoxFont (ComboBox& box)
 
 Font FlatButtonLookAndFeel::getLabelFont(Label& label)
 {
-    ignoreUnused(label);
-    if(customFont.getHeight()>900)
-        return Font();
-    
-    return customFont;
+	Font font(11.0f);
+    font.setBold(true);
+    return font;
     //return CabbageUtilities::getComponentFont();
 }
 
