@@ -991,7 +991,7 @@ void CabbagePluginProcessor::setStateInformation(const void* data, int sizeInByt
 }
 
 //==============================================================================
-void CabbagePluginProcessor::addPluginPreset(String presetName,  const String& fileName, bool remove)
+String CabbagePluginProcessor::addPluginPreset(String presetName,  const String& fileName, bool remove)
 {
     
     nlohmann::ordered_json j;
