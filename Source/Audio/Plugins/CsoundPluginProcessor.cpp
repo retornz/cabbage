@@ -591,18 +591,16 @@ void CsoundPluginProcessor::initAllCsoundChannels (ValueTree cabbageData)
             {
                 if (typeOfWidget == CabbageWidgetTypes::combobox || typeOfWidget == CabbageWidgetTypes::listbox)
                 {
-                    const String fileType = CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::filetype);
-                    
+                    const String fileType = CabbageWidgetData::getStringProp(cabbageData.getChild(i), "filetype");
                     //if we are dealing with a combobox that reads files from a directory, we need to load them before the GUI opens...
                     if (!CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::filetype).contains("preset")
                         && !CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::filetype).contains("*.snaps")
                         && !CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::filetype).contains(".snaps")
                         && !CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::filetype).contains("snaps"))
                     {
-                        const String relativeDir = CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::currentdir);
-                        const String workingDir = csdFilePath.getChildFile(relativeDir).getFullPathName();
+                        const String workingDir = CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::currentdir);
 
-                        if(relativeDir.isNotEmpty() && workingDir.isNotEmpty())
+                        if(workingDir.isNotEmpty())
                         {
                             int numOfFiles;
                             Array<File> folderFiles;
@@ -610,11 +608,12 @@ void CsoundPluginProcessor::initAllCsoundChannels (ValueTree cabbageData)
                             CabbageUtilities::searchDirectoryForFiles(workingDir, fileType, folderFiles, comboItems, numOfFiles);
                             const String currentValue = CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::value);
 
-                            const int index = comboItems.indexOf(currentValue);
+                            const int index = comboItems.indexOf(currentValue) + 1;
                             const String test = folderFiles[index].getFullPathName();
                             const String channel = CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::channel);
+
                             csound->SetStringChannel(CabbageWidgetData::getStringProp(cabbageData.getChild(i), CabbageIdentifierIds::channel).getCharPointer(),
-                                folderFiles[index-1].getFileNameWithoutExtension().toUTF8().getAddress());
+                                folderFiles[index].getFullPathName().replaceCharacters("\\", "/").toUTF8().getAddress());
                         }
                         else
                         {
@@ -701,7 +700,7 @@ void CsoundPluginProcessor::initAllCsoundChannels (ValueTree cabbageData)
     
     if (CabbageUtilities::getTargetPlatform() == CabbageUtilities::TargetPlatformTypes::Win)
     {
-        csound->SetChannel ("CSD_PATH", csdFilePath.getFullPathName().replace ("\\", "\\\\").toUTF8().getAddress());
+        csound->SetChannel ("CSD_PATH", csdFilePath.getParentDirectory().getFullPathName().replace ("\\", "\\\\").toUTF8().getAddress());
 		csound->SetStringChannel("USER_HOME_DIRECTORY", CabbageUtilities::getRealUserHomeDirectory().getFullPathName().replace("\\", "\\\\").toUTF8().getAddress());
 		csound->SetStringChannel("USER_DESKTOP_DIRECTORY", File::getSpecialLocation(File::userDesktopDirectory).getFullPathName().replace("\\", "\\\\").toUTF8().getAddress());
 		csound->SetStringChannel("USER_MUSIC_DIRECTORY", File::getSpecialLocation(File::userMusicDirectory).getFullPathName().replace("\\", "\\\\").toUTF8().getAddress());
