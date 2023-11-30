@@ -67,7 +67,6 @@ public:
         StringArray cabbageCode;
     };
 
-    File output;
 	CabbagePluginProcessor (const File& inputFile, BusesProperties IOBuses);
 	void createCsound(const File& inputFile, bool shouldCreateParameters = true);
     ~CabbagePluginProcessor() override;
