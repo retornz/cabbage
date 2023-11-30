@@ -49,8 +49,6 @@ CabbageSoundfiler::CabbageSoundfiler (ValueTree wData, CabbagePluginEditor* _own
     if (CabbageWidgetData::getProperty (wData, CabbageIdentifierIds::channel).size() == 0)
         soundfiler.setIsRangeSelectable (false);
 
-
-    Logger::writeToLog("CabbageSoundfiler::CabbageSoundfiler:\n\tCurrent file is:" + file);
     soundfiler.setFile (File::getCurrentWorkingDirectory().getChildFile(file));
     soundfiler.addChangeListener (this);
     

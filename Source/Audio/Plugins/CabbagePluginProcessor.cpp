@@ -2063,6 +2063,10 @@ void CabbagePluginProcessor::prepareToPlay(double sampleRate, int samplesPerBloc
 {
 	bool csoundRecompiled = false;
 #if !Cabbage_IDE_Build && !Cabbage_Lite
+	//if (this->getTotalNumOutputChannels() == 1)//mono
+	//	hostRequestedMono = true;
+	//else
+	//	hostRequestedMono = false;
 
 	//samplingRate = sampleRate;
 	CsoundPluginProcessor::prepareToPlay(sampleRate, samplesPerBlock);
