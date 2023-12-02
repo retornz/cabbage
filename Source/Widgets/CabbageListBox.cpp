@@ -104,6 +104,7 @@ CabbageListBox::CabbageListBox(ValueTree wData, CabbagePluginEditor* _owner):
     const Colour backgroundColour = Colour::fromString(CabbageWidgetData::getStringProp(widgetData, CabbageIdentifierIds::colour));
     
     listBox.getVerticalScrollBar().getLookAndFeel().setColour(ScrollBar::backgroundColourId, Colours::red);
+	listBox.getVerticalScrollBar().getLookAndFeel().setColour(ScrollBar::ColourIds::thumbColourId, Colours::lightblue);
     listBox.setColour(ListBox::backgroundColourId, backgroundColour);
     listBox.lookAndFeelChanged();
     resized();
