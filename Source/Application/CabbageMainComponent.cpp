@@ -2121,7 +2121,7 @@ void CabbageMainComponent::runCsoundForNode (String file, int fileTabIndex)
         if (File (file).existsAsFile())
         {
 
-            StringArray warnings = preCompileCheckForIssues(File(file));
+            StringArray warnings; // = preCompileCheckForIssues(File(file));
 
             AudioProcessorGraph::NodeID node(fileTabs[fileTabIndex != -99 ? fileTabIndex : currentFileIndex]->uniqueFileId);
 
