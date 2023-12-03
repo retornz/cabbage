@@ -31,9 +31,9 @@ CabbageTextEditor::CabbageTextEditor (ValueTree wData, CabbagePluginEditor* _own
     isMultiline = int(CabbageWidgetData::getNumProp (wData, CabbageIdentifierIds::wrap)) == 0 ? false : true;
     textEditor.setMultiLine(isMultiline);
     
-    setName(CabbageWidgetData::getStringProp(wData, CabbageIdentifierIds::name));
-    widgetData.addListener(this);              //add listener to valueTree so it gets notified when a widget's property changes
-    initialiseCommonAttributes(this, wData);   //initialise common attributes such as bounds, name, rotation, etc..
+    //setName(CabbageWidgetData::getStringProp(wData, CabbageIdentifierIds::name));
+    //widgetData.addListener(this);              //add listener to valueTree so it gets notified when a widget's property changes
+    //initialiseCommonAttributes(this, wData);   //initialise common attributes such as bounds, name, rotation, etc..
     
 
     const int readOnly = CabbageWidgetData::getProperty (wData, CabbageIdentifierIds::readonly);
@@ -62,6 +62,10 @@ CabbageTextEditor::CabbageTextEditor (ValueTree wData, CabbagePluginEditor* _own
             textEditor.setFont(userFont);
             textEditor.applyFontToAllText(userFont);
         }
+        else
+        {
+        	textEditor.setFont(Font(fontSize));
+    	}
     }
     
     textEditor.toggleEditOnDoubleClick = CabbageWidgetData::getNumProp (wData, CabbageIdentifierIds::doubleclicktogglesedit);
