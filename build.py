@@ -454,8 +454,6 @@ sys.stdout.write(RESET)
 print('')      
 os.chdir(rootDir)
 print('=====================================')
-if platform.system() == "Linux": 
-    os.system('git checkout develop')
 os.system('ls')
 print('=====================================')
 sys.stdout.write(GREEN)

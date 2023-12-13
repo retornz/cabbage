@@ -157,11 +157,11 @@ else()
     endif()
 
     juce_add_plugin(${PROJECT_NAME}
-        PLUGIN_NAME ${PROJECT_NAME}
-        FORMATS VST VST3 Standalone AU
+        PLUGIN_NAME "ToneZ_V2"
+        FORMATS VST VST3 AU
         PLUGIN_MANUFACTURER_CODE ${JucePlugin_ManufacturerCode}
-        PLUGIN_CODE RORY
-        DESCRIPTION ${JucePlugin_Desc}
+        PLUGIN_CODE RZ01
+        DESCRIPTION "v2.0.0"
         NEEDS_MIDI_INPUT TRUE
         NEEDS_MIDI_OUTPUT TRUE
         IS_SYNTH ${PLUGIN_IS_A_SYNTH}
@@ -172,7 +172,7 @@ else()
         VST_NUM_MIDI_OUTS 16
         VST2_CATEGORY "${PLUGIN_VST2_CATEGORY}"
         VST3_CATEGORIES "${PLUGIN_VST3_CATEGORIES}"
-        AU_EXPORT_PREFIX "${PROJECT_NAME}AU"
+        AU_EXPORT_PREFIX "ToneZ_V2AU"
         AU_SANDBOX_SAFE TRUE
         COPY_PLUGIN_AFTER_BUILD FALSE
         HARDENED_RUNTIME_OPTIONS com.apple.security.files.downloads.read-write com.apple.security.device.audio-input com.apple.security.cs.disable-library-validation com.apple.security.cs.allow-unsigned-executable-memory com.apple.security.device.audio-input
@@ -180,7 +180,7 @@ else()
         HARDENED_RUNTIME_ENABLED TRUE
         PLIST_TO_MERGE ${PLIST_INFO}
         HARDENED_RUNTIME_OPTIONS "com.apple.security.device.audio-input"
-        PRODUCT_NAME "${PROJECT_NAME}")   
+        PRODUCT_NAME "ToneZ_V2")   
 endif()
 
 juce_generate_juce_header(${PROJECT_NAME})
